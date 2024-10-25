@@ -1,0 +1,1468 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Georgy Meshcheryakov">
+    <title>Path Analysis Model: Report</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/semopy.css" rel="stylesheet">
+    <script src="./js/bootstrap.min.js"></script>
+    <style>nav .nav-link {
+    color: black;
+}
+nav .nav-link:hover {
+    color: grey;
+}
+nav .nav-link.active {
+    color: grey;
+}</style>
+
+
+  </head>
+  <body>
+<br><br>
+<div class="container-fluid">
+	<div class="row">
+	<div class="col-sm-8">
+	<h2 style="display:inline">Report: Path Analysis Model</h2>
+	</div>
+</div>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-sm-2">
+     <br>
+     <div class="sticky-top">
+      <nav class="nav flex-column" >
+        <a class="p-1 nav-link active" id="model_m" href="#model">Model information</a>
+        <a class="p-1 nav-link" id="estimates_m" href="#estimates">Estimates</a>
+        <a class="p-1 nav-link" id="indices_m" href="#indices">Fit indices</a>
+	<a class="p-1 nav-link" id="matrices_m" href="#matrices">Matrices</a>
+      </nav>
+     </div>
+    </div>
+    <div class="col-sm-9" style="border-left: 1px solid">
+     <br>
+	<a class="anchor" id="model"></a>
+	<h3>Model information</h3>
+		<div class="row">
+		<div class="col-sm-4">Model class:</div><div class="col-sm-2"><span style="background-color: #f6f8fa; font-family: monospace;">Model</span></div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Number of samples:</div><div class="col-sm-2">204</div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Objective function:</div><div class="col-sm-2">MLW</div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Converged:</div><div class="col-sm-2 text-success">Yes</div>
+		</div>
+		<br>
+		Description in <b>semopy</b> syntax:
+		<div class="col-sm-9" style="background-color: #f6f8fa;max-width: 100%;width: 100%;border: 1px solid">
+		<pre style="font-family: monospace">
+    # Within-domain cascading effects (autoregressive paths)
+    GAD7_7M ~ GAD7_3W
+    GAD7_12M ~ GAD7_7M
+    EPDS_7W ~ EPDS_3W
+    ADS_12M ~ EPDS_7W
+    DTN_12M ~ DTN_7M
+
+    # Cross-domain cascading effects (mother-to-child and child-to-mother)
+    DTN_7M ~ GAD7_3W + EPDS_3W
+    DTN_12M ~ GAD7_7M + EPDS_7W
+    GAD7_7M ~ DTN_7M
+    GAD7_12M ~ DTN_12M
+    EPDS_7W ~ DTN_7M
+    ADS_12M ~ DTN_12M
+
+    # Variances and covariances
+    GAD7_3W ~~ GAD7_3W
+    GAD7_7M ~~ GAD7_7M
+    GAD7_12M ~~ GAD7_12M
+    EPDS_3W ~~ EPDS_3W
+    EPDS_7W ~~ EPDS_7W
+    ADS_12M ~~ ADS_12M
+    DTN_7M ~~ DTN_7M
+    DTN_12M ~~ DTN_12M
+</pre>
+		</div>
+		<br>
+		<div class="accordion" id="accordion1">
+		<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingOne">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		Variables classification
+	      </button>
+	    </h2>
+	    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion1">
+	      <div class="accordion-body">
+		<div class="row"><div class="col-sm-2">all</div><div class="col-sm-6">GAD7_3W, EPDS_3W, GAD7_7M, ADS_12M, GAD7_12M, DTN_12M, EPDS_7W, DTN_7M</div></div><div class="row"><div class="col-sm-2">endogenous</div><div class="col-sm-6">GAD7_7M, ADS_12M, GAD7_12M, EPDS_7W, DTN_12M, DTN_7M</div></div><div class="row"><div class="col-sm-2">exogenous</div><div class="col-sm-6">GAD7_3W, EPDS_3W</div></div><div class="row"><div class="col-sm-2">observed</div><div class="col-sm-6">ADS_12M, GAD7_12M, DTN_12M, DTN_7M, EPDS_3W, EPDS_7W, GAD7_3W, GAD7_7M</div></div><div class="row"><div class="col-sm-2">latent</div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-2">indicator</div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-2">output</div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-2">_output</div><div class="col-sm-6">ADS_12M, GAD7_12M</div></div><div class="row"><div class="col-sm-2">inner</div><div class="col-sm-6">DTN_12M, DTN_7M, EPDS_3W, EPDS_7W, GAD7_3W, GAD7_7M</div></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<br>
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link active" id="plainfig-tab" data-bs-toggle="tab" data-bs-target="#plainfig" type="button" role="tab" aria-controls="plainfig" aria-selected="true">Omit covariances and estimates</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="covfig-tab" data-bs-toggle="tab" data-bs-target="#covfig" type="button" role="tab" aria-controls="covfig" aria-selected="false">Omit covariances</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="plainparamfig-tab" data-bs-toggle="tab" data-bs-target="#plainparamfig" type="button" role="tab" aria-controls="plainparamfig" aria-selected="false">Omit estimates</button>
+		  </li>
+		<li class="nav-item" role="presentation">
+		    <button class="nav-link" id="covparamfig-tab" data-bs-toggle="tab" data-bs-target="#covparamfig" type="button" role="tab" aria-controls="covparamfig" aria-selected="false">Show estimates and covariances</button>
+		  </li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+		  <div class="tab-pane fade show active" id="plainfig" role="tabpanel" aria-labelledby="plainfig-tab"><img src="./plots/1.png" class="img-fluid" alt="Model figure with covariances and estimates omitted"></div>
+		  <div class="tab-pane fade" id="covfig" role="tabpanel" aria-labelledby="covfig-tab"><img src="./plots/2.png" class="img-fluid" alt="Model figure with covariances omitted"></div>
+		  <div class="tab-pane fade" id="plainparamfig" role="tabpanel" aria-labelledby="plainparamfig-tab"><img src="./plots/3.png" class="img-fluid" alt="Model figure with estimates omitted"></div>
+		 <div class="tab-pane fade" id="covparamfig" role="tabpanel" aria-labelledby="covparamfig-tab"><img src="./plots/4.png" class="img-fluid" alt="Model figure"></div>
+		</div>
+		
+	<a class="anchor" id="estimates"></a>
+	<h3>Estimates</h3>
+	<div style="font-family:monospace">
+	<div class="row"><div class='col-sm-2'></div><div class='col-sm-2'></div><div class='col-sm-1'>Estimate</div><div class='col-sm-1'>P-value</div></div><div class='col-sm-2'>Regressions:</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div><div class="row"><div class='col-sm-2 text-end'>GAD7_7M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_3W</div><div class='col-sm-1'>0.528</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_7M</div><div class='col-sm-1'>0.061</div><div class='col-sm-1'>0.057</div></div><div class="row"><div class='col-sm-2 text-end'>EPDS_7W ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>EPDS_3W</div><div class='col-sm-1'>-0.713</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_7M</div><div class='col-sm-1'>0.085</div><div class='col-sm-1'>0.042</div></div><div class="row"><div class='col-sm-2 text-end'>DTN_12M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_7M</div><div class='col-sm-1'>0.814</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_7M</div><div class='col-sm-1'>0.434</div><div class='col-sm-1'>0.002</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>EPDS_7W</div><div class='col-sm-1'>-0.195</div><div class='col-sm-1'>0.084</div></div><div class="row"><div class='col-sm-2 text-end'>DTN_7M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_3W</div><div class='col-sm-1'>0.422</div><div class='col-sm-1'>0.002</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>EPDS_3W</div><div class='col-sm-1'>-0.114</div><div class='col-sm-1'>0.569</div></div><div class="row"><div class='col-sm-2 text-end'>GAD7_12M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_7M</div><div class='col-sm-1'>0.686</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_12M</div><div class='col-sm-1'>0.019</div><div class='col-sm-1'>0.360</div></div><div class="row"><div class='col-sm-2 text-end'>ADS_12M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>EPDS_7W</div><div class='col-sm-1'>0.198</div><div class='col-sm-1'>0.064</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_12M</div><div class='col-sm-1'>0.134</div><div class='col-sm-1'>0.010</div></div><div class='col-sm-2'>Variances:</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_3W</div><div class='col-sm-1'>14.844</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_7M</div><div class='col-sm-1'>7.860</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>EPDS_3W</div><div class='col-sm-1'>6.845</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>EPDS_7W</div><div class='col-sm-1'>14.106</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_7M</div><div class='col-sm-1'>37.669</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_12M</div><div class='col-sm-1'>44.423</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_12M</div><div class='col-sm-1'>5.849</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>ADS_12M</div><div class='col-sm-1'>42.583</div><div class='col-sm-1'>0.000</div></div>
+	</div>
+	<br>
+	<div class="accordion" id="accordion3">
+	<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingThree">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+		semopy tabular output
+	      </button>
+	    </h2>	
+	    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordion3">
+	      <div class="accordion-body" style="background-color: #f6f8fa;max-width: 100%;width: 100%">
+		<pre style="font-family: monospace">        lval  op      rval   Estimate  Std. Err    z-value       p-value
+0    GAD7_7M   ~   GAD7_3W   0.527845  0.053084   9.943530  0.000000e+00
+1    GAD7_7M   ~    DTN_7M   0.060807  0.031958   1.902737  5.707483e-02
+2    EPDS_7W   ~   EPDS_3W  -0.713176  0.102426  -6.962841  3.334666e-12
+3    EPDS_7W   ~    DTN_7M   0.085092  0.041871   2.032243  4.212903e-02
+4    DTN_12M   ~    DTN_7M   0.813595  0.076859  10.585557  0.000000e+00
+5    DTN_12M   ~   GAD7_7M   0.433694  0.137923   3.144469  1.663883e-03
+6    DTN_12M   ~   EPDS_7W  -0.195018  0.112765  -1.729419  8.373408e-02
+7     DTN_7M   ~   GAD7_3W   0.421982  0.136199   3.098276  1.946502e-03
+8     DTN_7M   ~   EPDS_3W  -0.114148  0.200577  -0.569099  5.692889e-01
+9   GAD7_12M   ~   GAD7_7M   0.685536  0.050348  13.615858  0.000000e+00
+10  GAD7_12M   ~   DTN_12M   0.018703  0.020411   0.916293  3.595131e-01
+11   ADS_12M   ~   EPDS_7W   0.198150  0.107090   1.850320  6.426742e-02
+12   ADS_12M   ~   DTN_12M   0.134432  0.052301   2.570371  1.015896e-02
+13   GAD7_3W  ~~   GAD7_3W  14.844411  1.043876  14.220468  0.000000e+00
+14   GAD7_7M  ~~   GAD7_7M   7.860497  0.778305  10.099505  0.000000e+00
+15   EPDS_3W  ~~   EPDS_3W   6.844600  0.481320  14.220468  0.000000e+00
+16   EPDS_7W  ~~   EPDS_7W  14.106032  1.396705  10.099505  0.000000e+00
+17    DTN_7M  ~~    DTN_7M  37.668663  3.729753  10.099505  0.000000e+00
+18   DTN_12M  ~~   DTN_12M  44.422845  4.398517  10.099505  0.000000e+00
+19  GAD7_12M  ~~  GAD7_12M   5.849440  0.579181  10.099505  0.000000e+00
+20   ADS_12M  ~~   ADS_12M  42.582621  4.216308  10.099505  0.000000e+00</pre>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<br>
+	<div class="accordion" id="accordion2">
+	<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingTwo">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+		Optimizer report
+	      </button>
+	    </h2>	
+	    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion2">
+	      <div class="accordion-body" style="background-color: #f6f8fa;max-width: 100%;width: 100%">
+		<pre style="font-family: monospace">Name of objective: MLW
+Optimization method: SLSQP
+Optimization successful.
+Optimization terminated successfully
+Objective value: 0.962
+Number of iterations: 54
+Params: 0.528 0.061 0.686 0.019 -0.713 0.085 0.198 0.134 0.814 0.434 -0.195 0.422 -0.114 14.844 7.860 5.849 6.845 14.106 42.583 37.669 44.423</pre>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<a class="anchor" id="indices"></a>
+	<h3>Fit indices</h3>
+	<table class="table"><thead><tr><th scope='col'>DoF</th><th scope='col'>DoF Baseline</th><th scope='col'>chi2</th><th scope='col'>chi2 p-value</th><th scope='col'>chi2 Baseline</th></tr></thead><tbody><tr><td>15.000</td><td>28.000</td><td>196.179</td><td>0.000</td><td>708.998</td></tr></tbody></table><table class="table"><thead><tr><th scope='col'>CFI</th><th scope='col'>GFI</th><th scope='col'>AGFI</th><th scope='col'>NFI</th><th scope='col'>TLI</th></tr></thead><tbody><tr><td>0.734</td><td>0.723</td><td>0.483</td><td>0.723</td><td>0.503</td></tr></tbody></table><table class="table"><thead><tr><th scope='col'>RMSEA</th><th scope='col'>AIC</th><th scope='col'>BIC</th><th scope='col'>LogLik</th></tr></thead><tbody><tr><td>0.244</td><td>40.077</td><td>109.757</td><td>0.962</td></tr></tbody></table>
+	<a class="anchor" id="matrices"></a>
+	<h3>Matrices</h3>
+ 	<center><h4>Covariance matrix</h4></center>
+<ul class="nav nav-tabs" id="cov" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="sample-tab" data-bs-toggle="tab" data-bs-target="#sample"
+type="button" role="tab" aria-controls="sample" aria-selected="true">Sample</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="modelimplied-tab" data-bs-toggle="tab" data-bs-target="#modelimplied"
+type="button" role="tab" aria-controls="modelimplied" aria-selected="false">Model-implied</button>
+</li></ul><div class="tab-content" id="covContent"><div class="tab-pane fade show active" id="sample" role="tabpanel" aria-labelledby="sample-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>ADS_12M</th>
+      <th>GAD7_12M</th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>44.90</td>
+      <td>4.82</td>
+      <td>11.32</td>
+      <td>2.95</td>
+      <td>-0.22</td>
+      <td>4.44</td>
+      <td>4.13</td>
+      <td>5.07</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>4.82</td>
+      <td>12.00</td>
+      <td>7.06</td>
+      <td>6.39</td>
+      <td>-3.33</td>
+      <td>9.77</td>
+      <td>8.15</td>
+      <td>8.79</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>11.32</td>
+      <td>7.06</td>
+      <td>75.26</td>
+      <td>34.91</td>
+      <td>-7.32</td>
+      <td>6.09</td>
+      <td>8.73</td>
+      <td>8.24</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>2.95</td>
+      <td>6.39</td>
+      <td>34.91</td>
+      <td>41.02</td>
+      <td>-3.22</td>
+      <td>5.79</td>
+      <td>6.93</td>
+      <td>6.15</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>-0.22</td>
+      <td>-3.33</td>
+      <td>-7.32</td>
+      <td>-3.22</td>
+      <td>6.84</td>
+      <td>-5.16</td>
+      <td>-5.79</td>
+      <td>-4.04</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>4.44</td>
+      <td>9.77</td>
+      <td>6.09</td>
+      <td>5.79</td>
+      <td>-5.16</td>
+      <td>18.28</td>
+      <td>9.46</td>
+      <td>11.39</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>4.13</td>
+      <td>8.15</td>
+      <td>8.73</td>
+      <td>6.93</td>
+      <td>-5.79</td>
+      <td>9.46</td>
+      <td>14.84</td>
+      <td>8.26</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>5.07</td>
+      <td>8.79</td>
+      <td>8.24</td>
+      <td>6.15</td>
+      <td>-4.04</td>
+      <td>11.39</td>
+      <td>8.26</td>
+      <td>12.59</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="modelimplied" role="tabpanel" aria-labelledby="modelimplied-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>ADS_12M</th>
+      <th>GAD7_12M</th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>44.81</td>
+      <td>1.50</td>
+      <td>10.77</td>
+      <td>5.83</td>
+      <td>-1.43</td>
+      <td>3.94</td>
+      <td>2.05</td>
+      <td>1.89</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>1.50</td>
+      <td>12.05</td>
+      <td>8.22</td>
+      <td>4.87</td>
+      <td>-2.28</td>
+      <td>1.99</td>
+      <td>5.82</td>
+      <td>8.82</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>10.77</td>
+      <td>8.22</td>
+      <td>76.62</td>
+      <td>34.86</td>
+      <td>-3.03</td>
+      <td>2.37</td>
+      <td>8.29</td>
+      <td>9.91</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>5.83</td>
+      <td>4.87</td>
+      <td>34.86</td>
+      <td>40.96</td>
+      <td>-3.22</td>
+      <td>5.78</td>
+      <td>6.92</td>
+      <td>6.15</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>-1.43</td>
+      <td>-2.28</td>
+      <td>-3.03</td>
+      <td>-3.22</td>
+      <td>6.84</td>
+      <td>-5.16</td>
+      <td>-5.79</td>
+      <td>-3.25</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>3.94</td>
+      <td>1.99</td>
+      <td>2.37</td>
+      <td>5.78</td>
+      <td>-5.16</td>
+      <td>18.28</td>
+      <td>4.72</td>
+      <td>2.84</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>2.05</td>
+      <td>5.82</td>
+      <td>8.29</td>
+      <td>6.92</td>
+      <td>-5.79</td>
+      <td>4.72</td>
+      <td>14.84</td>
+      <td>8.26</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>1.89</td>
+      <td>8.82</td>
+      <td>9.91</td>
+      <td>6.15</td>
+      <td>-3.25</td>
+      <td>2.84</td>
+      <td>8.26</td>
+      <td>12.59</td>
+    </tr>
+  </tbody>
+</table></div></div><br><center><h4>Model matrices</h4></center><ul class="nav nav-tabs" id="modelmatrices" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="mxBeta-tab" data-bs-toggle="tab" data-bs-target="#mxBeta"
+type="button" role="tab" aria-controls="mxBeta" aria-selected="true">Beta</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxLambda-tab" data-bs-toggle="tab" data-bs-target="#mxLambda"
+type="button" role="tab" aria-controls="mxLambda" aria-selected="false">Lambda</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxPsi-tab" data-bs-toggle="tab" data-bs-target="#mxPsi"
+type="button" role="tab" aria-controls="mxPsi" aria-selected="false">Psi</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxTheta-tab" data-bs-toggle="tab" data-bs-target="#mxTheta"
+type="button" role="tab" aria-controls="mxTheta" aria-selected="false">Theta</button>
+</li></ul><div class="tab-content" id="covContent"><div class="tab-pane fade show active" id="mxBeta" role="tabpanel" aria-labelledby="mxBeta-tab"><ul class="nav nav-tabs" id="Betasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="BetaEstimates-tab" data-bs-toggle="tab" data-bs-target="#BetaEstimates"
+type="button" role="tab" aria-controls="BetaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="BetaStart-tab" data-bs-toggle="tab" data-bs-target="#BetaStart"
+type="button" role="tab" aria-controls="BetaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="BetaNames-tab" data-bs-toggle="tab" data-bs-target="#BetaNames"
+type="button" role="tab" aria-controls="BetaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Path Analysis ModelsubContent"><div class="tab-pane fade show active" id="BetaEstimates" role="tabpanel" aria-labelledby="BetaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.00</td>
+      <td>0.81</td>
+      <td>0.00</td>
+      <td>-0.20</td>
+      <td>0.00</td>
+      <td>0.43</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>-0.11</td>
+      <td>0.00</td>
+      <td>0.42</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.09</td>
+      <td>-0.71</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.06</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.53</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="BetaStart" role="tabpanel" aria-labelledby="BetaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="BetaNames" role="tabpanel" aria-labelledby="BetaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.00</td>
+      <td>_b9</td>
+      <td>0.00</td>
+      <td>_b11</td>
+      <td>0.00</td>
+      <td>_b10</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_b13</td>
+      <td>0.00</td>
+      <td>_b12</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>_b6</td>
+      <td>_b5</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>_b2</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_b1</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxLambda" role="tabpanel" aria-labelledby="mxLambda-tab"><ul class="nav nav-tabs" id="Lambdasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="LambdaEstimates-tab" data-bs-toggle="tab" data-bs-target="#LambdaEstimates"
+type="button" role="tab" aria-controls="LambdaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="LambdaStart-tab" data-bs-toggle="tab" data-bs-target="#LambdaStart"
+type="button" role="tab" aria-controls="LambdaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="LambdaNames-tab" data-bs-toggle="tab" data-bs-target="#LambdaNames"
+type="button" role="tab" aria-controls="LambdaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Path Analysis ModelsubContent"><div class="tab-pane fade show active" id="LambdaEstimates" role="tabpanel" aria-labelledby="LambdaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>0.13</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.20</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.02</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.69</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="LambdaStart" role="tabpanel" aria-labelledby="LambdaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="LambdaNames" role="tabpanel" aria-labelledby="LambdaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>_b8</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_b7</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>_b4</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_b3</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxPsi" role="tabpanel" aria-labelledby="mxPsi-tab"><ul class="nav nav-tabs" id="Psisub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="PsiEstimates-tab" data-bs-toggle="tab" data-bs-target="#PsiEstimates"
+type="button" role="tab" aria-controls="PsiEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="PsiStart-tab" data-bs-toggle="tab" data-bs-target="#PsiStart"
+type="button" role="tab" aria-controls="PsiStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="PsiNames-tab" data-bs-toggle="tab" data-bs-target="#PsiNames"
+type="button" role="tab" aria-controls="PsiNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Path Analysis ModelsubContent"><div class="tab-pane fade show active" id="PsiEstimates" role="tabpanel" aria-labelledby="PsiEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>44.42</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>37.67</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>6.84</td>
+      <td>0.00</td>
+      <td>-5.79</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>14.11</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>-5.79</td>
+      <td>0.00</td>
+      <td>14.84</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>7.86</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="PsiStart" role="tabpanel" aria-labelledby="PsiStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>37.63</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>20.51</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>6.84</td>
+      <td>0.00</td>
+      <td>-5.79</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>9.14</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>-5.79</td>
+      <td>0.00</td>
+      <td>14.84</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>6.30</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="PsiNames" role="tabpanel" aria-labelledby="PsiNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>_c9</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>_c8</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c5</td>
+      <td>0.00</td>
+      <td>_c2</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c6</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c2</td>
+      <td>0.00</td>
+      <td>_c1</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c3</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxTheta" role="tabpanel" aria-labelledby="mxTheta-tab"><ul class="nav nav-tabs" id="Thetasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="ThetaEstimates-tab" data-bs-toggle="tab" data-bs-target="#ThetaEstimates"
+type="button" role="tab" aria-controls="ThetaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="ThetaStart-tab" data-bs-toggle="tab" data-bs-target="#ThetaStart"
+type="button" role="tab" aria-controls="ThetaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="ThetaNames-tab" data-bs-toggle="tab" data-bs-target="#ThetaNames"
+type="button" role="tab" aria-controls="ThetaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Path Analysis ModelsubContent"><div class="tab-pane fade show active" id="ThetaEstimates" role="tabpanel" aria-labelledby="ThetaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>ADS_12M</th>
+      <th>GAD7_12M</th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>42.58</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>5.85</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="ThetaStart" role="tabpanel" aria-labelledby="ThetaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>ADS_12M</th>
+      <th>GAD7_12M</th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>22.45</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>6.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="ThetaNames" role="tabpanel" aria-labelledby="ThetaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>ADS_12M</th>
+      <th>GAD7_12M</th>
+      <th>DTN_12M</th>
+      <th>DTN_7M</th>
+      <th>EPDS_3W</th>
+      <th>EPDS_7W</th>
+      <th>GAD7_3W</th>
+      <th>GAD7_7M</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ADS_12M</th>
+      <td>_c7</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>_c4</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>EPDS_7W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div>
+    </div>
+   </div>
+  </div>
+</div>
+<footer class="footer">
+      <div class="container">
+	<br>
+	<center>
+        <span class="text-muted">Generated by <a href="https://semopy.com"><b>semopy</b></a> v. 2.3.11.</span>
+	</center>
+      </div>
+    </footer>
+</body>
+<script>
+const menus = [document.getElementById("model_m"), document.getElementById("estimates_m"), document.getElementById("indices_m"), document.getElementById("matrices_m")];
+const headers = [document.getElementById("model"), document.getElementById("estimates"), document.getElementById("indices"), document.getElementById("matrices")];
+var cur = menus[0];
+cur.classList.add('active');
+window.addEventListener("scroll", function() {
+  headers.forEach(function(item, index, array) {
+    if (window.scrollY >= (item.offsetTop - 1.05 * item.offsetHeight)) {
+        item = menus[index];
+        cur.classList.remove("active");
+        cur = item;
+        cur.classList.add("active");
+  }
+});
+});
+</script>
+
+</html>

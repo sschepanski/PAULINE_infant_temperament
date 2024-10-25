@@ -1,0 +1,1357 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Georgy Meshcheryakov">
+    <title>Refined Model: Report</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/semopy.css" rel="stylesheet">
+    <script src="./js/bootstrap.min.js"></script>
+    <style>nav .nav-link {
+    color: black;
+}
+nav .nav-link:hover {
+    color: grey;
+}
+nav .nav-link.active {
+    color: grey;
+}</style>
+
+
+  </head>
+  <body>
+<br><br>
+<div class="container-fluid">
+	<div class="row">
+	<div class="col-sm-8">
+	<h2 style="display:inline">Report: Refined Model</h2>
+	</div>
+</div>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-sm-2">
+     <br>
+     <div class="sticky-top">
+      <nav class="nav flex-column" >
+        <a class="p-1 nav-link active" id="model_m" href="#model">Model information</a>
+        <a class="p-1 nav-link" id="estimates_m" href="#estimates">Estimates</a>
+        <a class="p-1 nav-link" id="indices_m" href="#indices">Fit indices</a>
+	<a class="p-1 nav-link" id="matrices_m" href="#matrices">Matrices</a>
+      </nav>
+     </div>
+    </div>
+    <div class="col-sm-9" style="border-left: 1px solid">
+     <br>
+	<a class="anchor" id="model"></a>
+	<h3>Model information</h3>
+		<div class="row">
+		<div class="col-sm-4">Model class:</div><div class="col-sm-2"><span style="background-color: #f6f8fa; font-family: monospace;">Model</span></div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Number of samples:</div><div class="col-sm-2">204</div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Objective function:</div><div class="col-sm-2">MLW</div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Converged:</div><div class="col-sm-2 text-success">Yes</div>
+		</div>
+		<br>
+		Description in <b>semopy</b> syntax:
+		<div class="col-sm-9" style="background-color: #f6f8fa;max-width: 100%;width: 100%;border: 1px solid">
+		<pre style="font-family: monospace">
+    # Latent Variables
+    maternal_anxiety =~ GAD7_3W + GAD7_7M + GAD7_12M
+    infant_temperament =~ DTN_7M + DTN_12M
+    
+    # Effects of maternal anxiety on infant temperament
+    infant_temperament ~ maternal_anxiety
+    
+    # Covariates for infant temperament
+    infant_temperament ~ BirthWeight + ChildSex
+
+    # Cross-lagged effects
+    GAD7_7M ~ GAD7_3W
+    DTN_12M ~ DTN_7M
+
+    # Variances for latent variables
+    GAD7_3W ~~ GAD7_3W
+    GAD7_7M ~~ GAD7_7M
+    GAD7_12M ~~ GAD7_12M
+    DTN_7M ~~ DTN_7M
+    DTN_12M ~~ DTN_12M
+</pre>
+		</div>
+		<br>
+		<div class="accordion" id="accordion1">
+		<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingOne">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		Variables classification
+	      </button>
+	    </h2>
+	    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion1">
+	      <div class="accordion-body">
+		<div class="row"><div class="col-sm-2">all</div><div class="col-sm-6">DTN_12M, infant_temperament, GAD7_3W, GAD7_12M, maternal_anxiety, DTN_7M, ChildSex, GAD7_7M, BirthWeight</div></div><div class="row"><div class="col-sm-2">endogenous</div><div class="col-sm-6">DTN_12M, infant_temperament, GAD7_3W, GAD7_12M, DTN_7M, GAD7_7M</div></div><div class="row"><div class="col-sm-2">exogenous</div><div class="col-sm-6">maternal_anxiety, ChildSex, BirthWeight</div></div><div class="row"><div class="col-sm-2">observed</div><div class="col-sm-6">DTN_12M, GAD7_12M, GAD7_7M, BirthWeight, ChildSex, DTN_7M, GAD7_3W</div></div><div class="row"><div class="col-sm-2">latent</div><div class="col-sm-6">maternal_anxiety, infant_temperament</div></div><div class="row"><div class="col-sm-2">indicator</div><div class="col-sm-6">DTN_12M, GAD7_3W, GAD7_12M, DTN_7M, GAD7_7M</div></div><div class="row"><div class="col-sm-2">output</div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-2">_output</div><div class="col-sm-6">DTN_12M, GAD7_7M, GAD7_12M</div></div><div class="row"><div class="col-sm-2">inner</div><div class="col-sm-6">infant_temperament, maternal_anxiety, BirthWeight, ChildSex, DTN_7M, GAD7_3W</div></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<br>
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link active" id="plainfig-tab" data-bs-toggle="tab" data-bs-target="#plainfig" type="button" role="tab" aria-controls="plainfig" aria-selected="true">Omit covariances and estimates</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="covfig-tab" data-bs-toggle="tab" data-bs-target="#covfig" type="button" role="tab" aria-controls="covfig" aria-selected="false">Omit covariances</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="plainparamfig-tab" data-bs-toggle="tab" data-bs-target="#plainparamfig" type="button" role="tab" aria-controls="plainparamfig" aria-selected="false">Omit estimates</button>
+		  </li>
+		<li class="nav-item" role="presentation">
+		    <button class="nav-link" id="covparamfig-tab" data-bs-toggle="tab" data-bs-target="#covparamfig" type="button" role="tab" aria-controls="covparamfig" aria-selected="false">Show estimates and covariances</button>
+		  </li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+		  <div class="tab-pane fade show active" id="plainfig" role="tabpanel" aria-labelledby="plainfig-tab"><img src="./plots/1.png" class="img-fluid" alt="Model figure with covariances and estimates omitted"></div>
+		  <div class="tab-pane fade" id="covfig" role="tabpanel" aria-labelledby="covfig-tab"><img src="./plots/2.png" class="img-fluid" alt="Model figure with covariances omitted"></div>
+		  <div class="tab-pane fade" id="plainparamfig" role="tabpanel" aria-labelledby="plainparamfig-tab"><img src="./plots/3.png" class="img-fluid" alt="Model figure with estimates omitted"></div>
+		 <div class="tab-pane fade" id="covparamfig" role="tabpanel" aria-labelledby="covparamfig-tab"><img src="./plots/4.png" class="img-fluid" alt="Model figure"></div>
+		</div>
+		
+	<a class="anchor" id="estimates"></a>
+	<h3>Estimates</h3>
+	<div style="font-family:monospace">
+	<div class="row"><div class='col-sm-2'></div><div class='col-sm-2'></div><div class='col-sm-1'>Estimate</div><div class='col-sm-1'>P-value</div></div><div class='col-sm-2'>Measurement:</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div><div class="row"><div class='col-sm-2 text-end'>maternal_anxiety =~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_7M</div><div class='col-sm-1'>1.280</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_12M</div><div class='col-sm-1'>0.917</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'>infant_temperament =~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_12M</div><div class='col-sm-1'>0.803</div><div class='col-sm-1'>0.002</div></div><div class='col-sm-2'>Regressions:</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div><div class="row"><div class='col-sm-2 text-end'>GAD7_3W ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>maternal_anxiety</div><div class='col-sm-1'>1.000</div><div class='col-sm-1'>-</div></div><div class="row"><div class='col-sm-2 text-end'>DTN_7M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>infant_temperament</div><div class='col-sm-1'>1.000</div><div class='col-sm-1'>-</div></div><div class="row"><div class='col-sm-2 text-end'>infant_temperament ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>maternal_anxiety</div><div class='col-sm-1'>0.649</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>BirthWeight</div><div class='col-sm-1'>-0.003</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>ChildSex</div><div class='col-sm-1'>-1.627</div><div class='col-sm-1'>0.026</div></div><div class="row"><div class='col-sm-2 text-end'>GAD7_7M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_3W</div><div class='col-sm-1'>-0.219</div><div class='col-sm-1'>0.483</div></div><div class="row"><div class='col-sm-2 text-end'>DTN_12M ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_7M</div><div class='col-sm-1'>0.566</div><div class='col-sm-1'>0.000</div></div><div class='col-sm-2'>Variances:</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_3W</div><div class='col-sm-1'>5.856</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_7M</div><div class='col-sm-1'>26.464</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>infant_temperament</div><div class='col-sm-1'>7.063</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>maternal_anxiety</div><div class='col-sm-1'>8.985</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_7M</div><div class='col-sm-1'>2.188</div><div class='col-sm-1'>0.342</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>GAD7_12M</div><div class='col-sm-1'>4.455</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>DTN_12M</div><div class='col-sm-1'>39.338</div><div class='col-sm-1'>0.000</div></div>
+	</div>
+	<br>
+	<div class="accordion" id="accordion3">
+	<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingThree">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+		semopy tabular output
+	      </button>
+	    </h2>	
+	    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordion3">
+	      <div class="accordion-body" style="background-color: #f6f8fa;max-width: 100%;width: 100%">
+		<pre style="font-family: monospace">                  lval  op                rval   Estimate  Std. Err   
+0              GAD7_3W   ~    maternal_anxiety   1.000000         -  \
+1               DTN_7M   ~  infant_temperament   1.000000         -   
+2   infant_temperament   ~    maternal_anxiety   0.648586   0.16318   
+3   infant_temperament   ~         BirthWeight  -0.003341  0.000808   
+4   infant_temperament   ~            ChildSex  -1.626673  0.732473   
+5              GAD7_7M   ~    maternal_anxiety   1.280403  0.316983   
+6             GAD7_12M   ~    maternal_anxiety   0.916531  0.161482   
+7              DTN_12M   ~  infant_temperament   0.802965  0.257502   
+8              GAD7_7M   ~             GAD7_3W  -0.218935  0.311918   
+9              DTN_12M   ~              DTN_7M   0.565723  0.107996   
+10             GAD7_3W  ~~             GAD7_3W   5.855790  1.649528   
+11              DTN_7M  ~~              DTN_7M  26.463556  2.362419   
+12  infant_temperament  ~~  infant_temperament   7.062821  1.946765   
+13    maternal_anxiety  ~~    maternal_anxiety   8.984845  2.051303   
+14             GAD7_7M  ~~             GAD7_7M   2.187629   2.30095   
+15            GAD7_12M  ~~            GAD7_12M   4.455232  1.247226   
+16             DTN_12M  ~~             DTN_12M  39.337605  4.192081   
+
+      z-value   p-value  
+0           -         -  
+1           -         -  
+2     3.97467   0.00007  
+3   -4.137904  0.000035  
+4   -2.220797  0.026365  
+5    4.039346  0.000054  
+6    5.675762       0.0  
+7    3.118285  0.001819  
+8     -0.7019  0.482742  
+9    5.238381       0.0  
+10   3.549978  0.000385  
+11  11.201888       0.0  
+12   3.627978  0.000286  
+13   4.380067  0.000012  
+14    0.95075  0.341731  
+15   3.572114  0.000354  
+16   9.383789       0.0  </pre>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<br>
+	<div class="accordion" id="accordion2">
+	<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingTwo">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+		Optimizer report
+	      </button>
+	    </h2>	
+	    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion2">
+	      <div class="accordion-body" style="background-color: #f6f8fa;max-width: 100%;width: 100%">
+		<pre style="font-family: monospace">Name of objective: MLW
+Optimization method: SLSQP
+Optimization successful.
+Optimization terminated successfully
+Objective value: 0.023
+Number of iterations: 60
+Params: 1.280 0.917 0.803 0.649 -0.003 -1.627 -0.219 0.566 5.856 2.188 4.455 26.464 39.338 7.063 8.985</pre>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<a class="anchor" id="indices"></a>
+	<h3>Fit indices</h3>
+	<table class="table"><thead><tr><th scope='col'>DoF</th><th scope='col'>DoF Baseline</th><th scope='col'>chi2</th><th scope='col'>chi2 p-value</th><th scope='col'>chi2 Baseline</th></tr></thead><tbody><tr><td>13.000</td><td>23.000</td><td>4.761</td><td>0.980</td><td>421.221</td></tr></tbody></table><table class="table"><thead><tr><th scope='col'>CFI</th><th scope='col'>GFI</th><th scope='col'>AGFI</th><th scope='col'>NFI</th><th scope='col'>TLI</th></tr></thead><tbody><tr><td>1.021</td><td>0.989</td><td>0.980</td><td>0.989</td><td>1.037</td></tr></tbody></table><table class="table"><thead><tr><th scope='col'>RMSEA</th><th scope='col'>AIC</th><th scope='col'>BIC</th><th scope='col'>LogLik</th></tr></thead><tbody><tr><td>0.000</td><td>29.953</td><td>79.725</td><td>0.023</td></tr></tbody></table>
+	<a class="anchor" id="matrices"></a>
+	<h3>Matrices</h3>
+ 	<center><h4>Covariance matrix</h4></center>
+<ul class="nav nav-tabs" id="cov" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="sample-tab" data-bs-toggle="tab" data-bs-target="#sample"
+type="button" role="tab" aria-controls="sample" aria-selected="true">Sample</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="modelimplied-tab" data-bs-toggle="tab" data-bs-target="#modelimplied"
+type="button" role="tab" aria-controls="modelimplied" aria-selected="false">Model-implied</button>
+</li></ul><div class="tab-content" id="covContent"><div class="tab-pane fade show active" id="sample" role="tabpanel" aria-labelledby="sample-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>GAD7_12M</th>
+      <th>GAD7_7M</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>75.26</td>
+      <td>7.06</td>
+      <td>8.24</td>
+      <td>-1190.07</td>
+      <td>-0.67</td>
+      <td>34.91</td>
+      <td>8.73</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>7.06</td>
+      <td>12.00</td>
+      <td>8.79</td>
+      <td>-93.09</td>
+      <td>-0.06</td>
+      <td>6.39</td>
+      <td>8.15</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>8.24</td>
+      <td>8.79</td>
+      <td>12.59</td>
+      <td>-67.23</td>
+      <td>-0.02</td>
+      <td>6.15</td>
+      <td>8.26</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>-1190.07</td>
+      <td>-93.09</td>
+      <td>-67.23</td>
+      <td>219418.65</td>
+      <td>31.19</td>
+      <td>-756.37</td>
+      <td>1.03</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>-0.67</td>
+      <td>-0.06</td>
+      <td>-0.02</td>
+      <td>31.19</td>
+      <td>0.25</td>
+      <td>-0.58</td>
+      <td>-0.07</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>34.91</td>
+      <td>6.39</td>
+      <td>6.15</td>
+      <td>-756.37</td>
+      <td>-0.58</td>
+      <td>41.02</td>
+      <td>6.93</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>8.73</td>
+      <td>8.15</td>
+      <td>8.26</td>
+      <td>1.03</td>
+      <td>-0.07</td>
+      <td>6.93</td>
+      <td>14.84</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="modelimplied" role="tabpanel" aria-labelledby="modelimplied-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>GAD7_12M</th>
+      <th>GAD7_7M</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>74.57</td>
+      <td>7.31</td>
+      <td>8.47</td>
+      <td>-1072.92</td>
+      <td>-0.69</td>
+      <td>34.52</td>
+      <td>7.98</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>7.31</td>
+      <td>12.00</td>
+      <td>8.74</td>
+      <td>0.00</td>
+      <td>-0.00</td>
+      <td>5.34</td>
+      <td>8.23</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>8.47</td>
+      <td>8.74</td>
+      <td>12.59</td>
+      <td>0.00</td>
+      <td>-0.00</td>
+      <td>6.19</td>
+      <td>8.26</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>-1072.92</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>219418.65</td>
+      <td>31.19</td>
+      <td>-783.90</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>-0.69</td>
+      <td>-0.00</td>
+      <td>-0.00</td>
+      <td>31.19</td>
+      <td>0.25</td>
+      <td>-0.51</td>
+      <td>-0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>34.52</td>
+      <td>5.34</td>
+      <td>6.19</td>
+      <td>-783.90</td>
+      <td>-0.51</td>
+      <td>40.75</td>
+      <td>5.83</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>7.98</td>
+      <td>8.23</td>
+      <td>8.26</td>
+      <td>0.00</td>
+      <td>-0.00</td>
+      <td>5.83</td>
+      <td>14.84</td>
+    </tr>
+  </tbody>
+</table></div></div><br><center><h4>Model matrices</h4></center><ul class="nav nav-tabs" id="modelmatrices" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="mxBeta-tab" data-bs-toggle="tab" data-bs-target="#mxBeta"
+type="button" role="tab" aria-controls="mxBeta" aria-selected="true">Beta</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxLambda-tab" data-bs-toggle="tab" data-bs-target="#mxLambda"
+type="button" role="tab" aria-controls="mxLambda" aria-selected="false">Lambda</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxPsi-tab" data-bs-toggle="tab" data-bs-target="#mxPsi"
+type="button" role="tab" aria-controls="mxPsi" aria-selected="false">Psi</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxTheta-tab" data-bs-toggle="tab" data-bs-target="#mxTheta"
+type="button" role="tab" aria-controls="mxTheta" aria-selected="false">Theta</button>
+</li></ul><div class="tab-content" id="covContent"><div class="tab-pane fade show active" id="mxBeta" role="tabpanel" aria-labelledby="mxBeta-tab"><ul class="nav nav-tabs" id="Betasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="BetaEstimates-tab" data-bs-toggle="tab" data-bs-target="#BetaEstimates"
+type="button" role="tab" aria-controls="BetaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="BetaStart-tab" data-bs-toggle="tab" data-bs-target="#BetaStart"
+type="button" role="tab" aria-controls="BetaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="BetaNames-tab" data-bs-toggle="tab" data-bs-target="#BetaNames"
+type="button" role="tab" aria-controls="BetaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Refined ModelsubContent"><div class="tab-pane fade show active" id="BetaEstimates" role="tabpanel" aria-labelledby="BetaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>infant_temperament</th>
+      <td>0.00</td>
+      <td>0.65</td>
+      <td>-0.00</td>
+      <td>-1.63</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>maternal_anxiety</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="BetaStart" role="tabpanel" aria-labelledby="BetaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>infant_temperament</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>maternal_anxiety</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="BetaNames" role="tabpanel" aria-labelledby="BetaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>infant_temperament</th>
+      <td>0.00</td>
+      <td>_b6</td>
+      <td>_b7</td>
+      <td>_b8</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>maternal_anxiety</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>_b4</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>_b1</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxLambda" role="tabpanel" aria-labelledby="mxLambda-tab"><ul class="nav nav-tabs" id="Lambdasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="LambdaEstimates-tab" data-bs-toggle="tab" data-bs-target="#LambdaEstimates"
+type="button" role="tab" aria-controls="LambdaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="LambdaStart-tab" data-bs-toggle="tab" data-bs-target="#LambdaStart"
+type="button" role="tab" aria-controls="LambdaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="LambdaNames-tab" data-bs-toggle="tab" data-bs-target="#LambdaNames"
+type="button" role="tab" aria-controls="LambdaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Refined ModelsubContent"><div class="tab-pane fade show active" id="LambdaEstimates" role="tabpanel" aria-labelledby="LambdaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.80</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.57</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>0.92</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>1.28</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>-0.22</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="LambdaStart" role="tabpanel" aria-labelledby="LambdaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>0.85</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>0.55</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.56</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="LambdaNames" role="tabpanel" aria-labelledby="LambdaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>_b5</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_b10</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>_b3</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>_b2</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_b9</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxPsi" role="tabpanel" aria-labelledby="mxPsi-tab"><ul class="nav nav-tabs" id="Psisub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="PsiEstimates-tab" data-bs-toggle="tab" data-bs-target="#PsiEstimates"
+type="button" role="tab" aria-controls="PsiEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="PsiStart-tab" data-bs-toggle="tab" data-bs-target="#PsiStart"
+type="button" role="tab" aria-controls="PsiStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="PsiNames-tab" data-bs-toggle="tab" data-bs-target="#PsiNames"
+type="button" role="tab" aria-controls="PsiNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Refined ModelsubContent"><div class="tab-pane fade show active" id="PsiEstimates" role="tabpanel" aria-labelledby="PsiEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>infant_temperament</th>
+      <td>7.06</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>maternal_anxiety</th>
+      <td>0.00</td>
+      <td>8.98</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>219418.65</td>
+      <td>31.19</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>31.19</td>
+      <td>0.25</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>26.46</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>5.86</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="PsiStart" role="tabpanel" aria-labelledby="PsiStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>infant_temperament</th>
+      <td>0.05</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>maternal_anxiety</th>
+      <td>0.00</td>
+      <td>0.05</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>219418.65</td>
+      <td>31.19</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>31.19</td>
+      <td>0.25</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>20.51</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>7.42</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="PsiNames" role="tabpanel" aria-labelledby="PsiNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>infant_temperament</th>
+      <th>maternal_anxiety</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>infant_temperament</th>
+      <td>_c9</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>maternal_anxiety</th>
+      <td>0.00</td>
+      <td>_c10</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c6</td>
+      <td>_c8</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c8</td>
+      <td>_c7</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c4</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c1</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxTheta" role="tabpanel" aria-labelledby="mxTheta-tab"><ul class="nav nav-tabs" id="Thetasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="ThetaEstimates-tab" data-bs-toggle="tab" data-bs-target="#ThetaEstimates"
+type="button" role="tab" aria-controls="ThetaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="ThetaStart-tab" data-bs-toggle="tab" data-bs-target="#ThetaStart"
+type="button" role="tab" aria-controls="ThetaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="ThetaNames-tab" data-bs-toggle="tab" data-bs-target="#ThetaNames"
+type="button" role="tab" aria-controls="ThetaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Refined ModelsubContent"><div class="tab-pane fade show active" id="ThetaEstimates" role="tabpanel" aria-labelledby="ThetaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>GAD7_12M</th>
+      <th>GAD7_7M</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>39.34</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>4.46</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>2.19</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="ThetaStart" role="tabpanel" aria-labelledby="ThetaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>GAD7_12M</th>
+      <th>GAD7_7M</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>37.63</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>6.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>6.30</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="ThetaNames" role="tabpanel" aria-labelledby="ThetaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>DTN_12M</th>
+      <th>GAD7_12M</th>
+      <th>GAD7_7M</th>
+      <th>BirthWeight</th>
+      <th>ChildSex</th>
+      <th>DTN_7M</th>
+      <th>GAD7_3W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DTN_12M</th>
+      <td>_c5</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_12M</th>
+      <td>0.00</td>
+      <td>_c3</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>_c2</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>BirthWeight</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>ChildSex</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>DTN_7M</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>GAD7_3W</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div>
+    </div>
+   </div>
+  </div>
+</div>
+<footer class="footer">
+      <div class="container">
+	<br>
+	<center>
+        <span class="text-muted">Generated by <a href="https://semopy.com"><b>semopy</b></a> v. 2.3.11.</span>
+	</center>
+      </div>
+    </footer>
+</body>
+<script>
+const menus = [document.getElementById("model_m"), document.getElementById("estimates_m"), document.getElementById("indices_m"), document.getElementById("matrices_m")];
+const headers = [document.getElementById("model"), document.getElementById("estimates"), document.getElementById("indices"), document.getElementById("matrices")];
+var cur = menus[0];
+cur.classList.add('active');
+window.addEventListener("scroll", function() {
+  headers.forEach(function(item, index, array) {
+    if (window.scrollY >= (item.offsetTop - 1.05 * item.offsetHeight)) {
+        item = menus[index];
+        cur.classList.remove("active");
+        cur = item;
+        cur.classList.add("active");
+  }
+});
+});
+</script>
+
+</html>

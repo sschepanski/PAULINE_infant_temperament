@@ -1,0 +1,17 @@
+digraph G {
+	overlap=scale splines=true
+	edge [fontsize=12]
+	node [fillcolor="#cae6df" shape=circle style=filled]
+	infant_temperament_AUC [label=infant_temperament_AUC]
+	maternal_anxiety_AUC [label=maternal_anxiety_AUC]
+	node [shape=box style=""]
+	DTN_AUC [label=DTN_AUC]
+	GAD7_AUC [label=GAD7_AUC]
+	BirthWeight [label=BirthWeight]
+	ChildSex [label=ChildSex]
+	maternal_anxiety_AUC -> infant_temperament_AUC [label="0.130\np-val: 1.00"]
+	BirthWeight -> infant_temperament_AUC [label="-0.091\np-val: 0.00"]
+	ChildSex -> infant_temperament_AUC [label="-44.162\np-val: 0.00"]
+	maternal_anxiety_AUC -> GAD7_AUC [label=1.000]
+	infant_temperament_AUC -> DTN_AUC [label=1.000]
+}
